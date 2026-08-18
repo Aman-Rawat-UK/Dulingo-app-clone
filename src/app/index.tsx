@@ -1,98 +1,41 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function Index() {
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+      <ScrollView contentContainerStyle={{ padding: 24, gap: 16 }}>
+        <Text className="heading--h1">lingua</Text>
+        <Text className="heading--h2">Section Title</Text>
+        <Text className="heading--h3">Card / Module Title</Text>
+        <Text className="heading--h4">Subheading</Text>
+        <Text className="body--lg">Body Large — important content</Text>
+        <Text className="body--md">Body Medium — body text</Text>
+        <Text className="body--sm">Body Small — supporting text</Text>
+        <Text className="caption">CAPTION — LABELS, META TEXT</Text>
+
+        <View className="card gap-2">
+          <Text className="heading--h3">Design System Card</Text>
+          <Text className="body--md">
+            Rounded corners, soft border, and surface background straight from
+            the theme tokens.
+          </Text>
+        </View>
+
+        <View className="flex-row flex-wrap gap-2">
+          <View className="h-12 w-12 rounded-lg bg-primary-purple" />
+          <View className="h-12 w-12 rounded-lg bg-primary-deep-purple" />
+          <View className="h-12 w-12 rounded-lg bg-primary-blue" />
+          <View className="h-12 w-12 rounded-lg bg-primary-green" />
+          <View className="h-12 w-12 rounded-lg bg-warning" />
+          <View className="h-12 w-12 rounded-lg bg-streak" />
+          <View className="h-12 w-12 rounded-lg bg-error" />
+        </View>
+
+        <TouchableOpacity className="button--primary" activeOpacity={0.8}>
+          <Text className="button--primary__label">Continue</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});

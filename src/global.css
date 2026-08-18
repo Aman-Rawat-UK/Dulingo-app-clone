@@ -1,9 +1,44 @@
-:root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
-  --font-serif: Georgia, 'Times New Roman', serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Typography */
+  .heading--h1 {
+    @apply font-bold text-h1 text-text-primary;
+  }
+  .heading--h2 {
+    @apply font-semibold text-h2 text-text-primary;
+  }
+  .heading--h3 {
+    @apply font-semibold text-h3 text-text-primary;
+  }
+  .heading--h4 {
+    @apply font-medium text-h4 text-text-primary;
+  }
+  .body--lg {
+    @apply font-regular text-body-lg text-text-primary;
+  }
+  .body--md {
+    @apply font-regular text-body-md text-text-primary;
+  }
+  .body--sm {
+    @apply font-regular text-body-sm text-text-secondary;
+  }
+  .caption {
+    @apply font-regular text-caption text-text-secondary;
+  }
+
+  /* Card */
+  .card {
+    @apply rounded-card border border-border bg-background p-4;
+  }
+
+  /* Primary button */
+  .button--primary {
+    @apply items-center justify-center rounded-pill bg-primary-purple px-6 py-4;
+  }
+  .button--primary__label {
+    @apply font-semibold text-body-lg text-background;
+  }
 }

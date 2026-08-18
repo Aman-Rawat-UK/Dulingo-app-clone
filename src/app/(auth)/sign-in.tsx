@@ -47,13 +47,13 @@ export default function SignIn() {
 
   // Provider-specific OAuth handlers (wire real implementations later)
   const handleGoogle = async () => {
-    // TODO: implement Google OAuth flow; placeholder navigates home
-    router.replace("/");
+    // Not implemented yet — do not route or appear successful.
+    console.warn("Google OAuth not implemented");
   };
 
   const handleApple = async () => {
-    // TODO: implement Apple Sign In flow; placeholder navigates home
-    router.replace("/");
+    // Not implemented yet — do not route or appear successful.
+    console.warn("Apple Sign In not implemented");
   };
 
   return (
@@ -151,8 +151,8 @@ export default function SignIn() {
             </View>
 
             <View className="gap-3">
-              <SocialAuthButton provider="google" onPress={handleGoogle} />
-              <SocialAuthButton provider="apple" onPress={handleApple} />
+              <SocialAuthButton provider="google" onPress={handleGoogle} disabled />
+              <SocialAuthButton provider="apple" onPress={handleApple} disabled />
             </View>
 
             <View className="mt-auto flex-row items-center justify-center pt-6">

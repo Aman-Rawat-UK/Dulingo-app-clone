@@ -1,6 +1,6 @@
 import { resendCode, verifyCode } from "@/lib/auth";
 import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -32,6 +32,17 @@ export function VerificationModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resendStatus, setResendStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  useEffect(() => {
+    if (visible) {
+      setCode("");
+      setError(null);
+      setResendStatus("idle");
+      // keep loading alone — do not reset loading here
+      // focus the hidden input so keyboard is ready
+      setTimeout(() => inputRef.current?.focus(), 0);
+    }
+  }, [visible, email]);
 
   const handleChangeCode = async (value: string) => {
     if (loading) return;
@@ -126,7 +137,8 @@ export function VerificationModal({
               className="mt-8"
               activeOpacity={0.7}
               onPress={async () => {
-                if (resendStatus === "sending") return;
+                // Only allow resending when idle; prevent duplicate or repeated requests
+                if (resendStatus !== "idle") return;
                 setResendStatus("sending");
                 setError(null);
                 const res = await resendCode(email);

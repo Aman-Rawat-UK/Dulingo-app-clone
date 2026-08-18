@@ -1,7 +1,9 @@
 export type VerifyResult = { success: boolean; error?: string };
 
-// No backend exists yet (Clerk integration lands in a later step), so a
-// missing /api/auth/* route is the expected dev-mode state, not a failure.
+// Determine dev mode: prefer React Native's __DEV__ when available,
+// otherwise fall back to NODE_ENV !== 'production'.
+const isDev = typeof __DEV__ !== "undefined" ? __DEV__ : process.env.NODE_ENV !== "production";
+
 async function isRouteMissing(res: Response) {
   return res.status === 404;
 }
@@ -17,7 +19,10 @@ export async function requestCode(email: string, password?: string): Promise<Ver
       body: JSON.stringify(body),
     });
 
-    if (await isRouteMissing(res)) return { success: true };
+    if (await isRouteMissing(res)) {
+      if (isDev) return { success: true };
+      return { success: false, error: "Auth endpoint not available" };
+    }
 
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
@@ -26,9 +31,12 @@ export async function requestCode(email: string, password?: string): Promise<Ver
 
     const json = await res.json().catch(() => ({}));
     return { success: json?.success ?? true };
-  } catch {
-    // Fallback: pretend it succeeded in offline/dev mode
-    return { success: true };
+  } catch (e) {
+    if (isDev) {
+      // In development allow offline/mock behavior
+      return { success: true };
+    }
+    return { success: false, error: (e as Error)?.message ?? "Network error" };
   }
 }
 
@@ -42,8 +50,11 @@ export async function verifyCode(email: string, code: string): Promise<VerifyRes
     });
 
     if (await isRouteMissing(res)) {
-      if (code === "123456") return { success: true };
-      return { success: false, error: "Invalid verification code" };
+      if (isDev) {
+        if (code === "123456") return { success: true };
+        return { success: false, error: "Invalid verification code" };
+      }
+      return { success: false, error: "Auth endpoint not available" };
     }
 
     if (!res.ok) {
@@ -53,10 +64,12 @@ export async function verifyCode(email: string, code: string): Promise<VerifyRes
 
     const json = await res.json().catch(() => ({}));
     return { success: json?.success ?? true };
-  } catch {
-    // Fallback: accept a development code for local testing
-    if (code === "123456") return { success: true };
-    return { success: false, error: "Network error" };
+  } catch (e) {
+    if (isDev) {
+      if (code === "123456") return { success: true };
+      return { success: false, error: "Invalid verification code" };
+    }
+    return { success: false, error: (e as Error)?.message ?? "Network error" };
   }
 }
 
@@ -68,7 +81,10 @@ export async function resendCode(email: string): Promise<VerifyResult> {
       body: JSON.stringify({ email }),
     });
 
-    if (await isRouteMissing(res)) return { success: true };
+    if (await isRouteMissing(res)) {
+      if (isDev) return { success: true };
+      return { success: false, error: "Auth endpoint not available" };
+    }
 
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
@@ -77,8 +93,8 @@ export async function resendCode(email: string): Promise<VerifyResult> {
 
     const json = await res.json().catch(() => ({}));
     return { success: json?.success ?? true };
-  } catch {
-    // Fallback: pretend it succeeded in offline/dev mode
-    return { success: true };
+  } catch (e) {
+    if (isDev) return { success: true };
+    return { success: false, error: (e as Error)?.message ?? "Network error" };
   }
 }

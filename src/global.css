@@ -41,4 +41,23 @@
   .button--primary__label {
     @apply font-semibold text-body-lg text-background;
   }
+
+  /* Social auth button */
+  .button--social {
+    @apply flex-row items-center rounded-2xl border border-border px-4 py-4;
+  }
+  .button--social__label {
+    @apply ml-3 font-medium text-body-lg text-text-primary;
+  }
+
+  /* Text input field */
+  .input-field {
+    @apply rounded-2xl border border-border px-4 pb-4 pt-2;
+  }
+  .input-field__label {
+    @apply font-regular text-body-sm text-text-secondary;
+  }
+  .input-field__value {
+    @apply font-regular text-body-lg text-text-primary;
+  }
 }

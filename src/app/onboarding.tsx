@@ -1,5 +1,6 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 import { images } from "@/constants/images";
 
@@ -64,6 +65,7 @@ export default function Onboarding() {
         <TouchableOpacity
           className="button--primary mt-auto flex-row items-center justify-center"
           activeOpacity={0.8}
+          onPress={() => router.push("/(auth)/sign-up")}
         >
           <Text className="button--primary__label">Get Started</Text>
           <Text className="button--primary__label absolute right-6">›</Text>
